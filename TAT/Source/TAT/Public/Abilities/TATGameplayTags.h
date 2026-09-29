@@ -1,0 +1,29 @@
+// (c) 2018-2023 OtherSide Entertainment, Inc
+// SPDX-License-Identifier: MIT
+
+#pragma once
+
+// ue5
+#include "NativeGameplayTags.h"
+
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_Status_LockpickingDisabled)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_Status_PickupInteractionDisabled)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_Ability_Interact_NPC_FullHold)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_AI_Behavior_AlertnessTransition)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_Status_Health_Full)
+
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_AI_Alertness_Neutral)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_AI_Alertness_Suspicious)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_AI_Alertness_Alerted)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_AI_Alertness_Combat)
+
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_Status_SuspiciousAction)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_Status_SuspiciousAction_Expired)
+
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_AnimSet_Disguise)
+
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_AI_TargetingGroup_Projectile);
+
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_IndividualKnowledge_InteractingWithActor)
+
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_Status_Detection_Disabled)

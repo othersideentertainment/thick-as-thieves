@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "[OSE] Version",
+	"Description": "",
+	"Category": "OSE",
+	"CreatedBy": "OtherSide Entertainment",
+	"CreatedByURL": "https://otherside-e.com",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "OSEVersion",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}

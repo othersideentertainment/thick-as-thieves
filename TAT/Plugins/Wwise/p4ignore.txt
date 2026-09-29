@@ -1,0 +1,6 @@
+# Wwise .p4ignore
+
+*.chm
+
+*/Binaries/
+*/Generated/

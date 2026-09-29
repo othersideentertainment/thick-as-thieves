@@ -1,0 +1,126 @@
+{
+   "FileVersion": 3,
+   "Version": 1,
+   "VersionName": "1.0",
+   "FriendlyName": "[OSE] Core",
+   "Description": "Otherside Core Code/Assets",
+   "Category": "OSE",
+   "CreatedBy": "OtherSide Entertainment",
+   "CreatedByURL": "https://otherside-e.com",
+   "DocsURL": "",
+   "MarketplaceURL": "",
+   "SupportURL": "",
+   "CanContainContent": true,
+   "IsBetaVersion": false,
+   "IsExperimentalVersion": false,
+   "Installed": false,
+   "Modules": [
+      {
+         "Name": "OSERenderer",
+         "Type": "Runtime",
+         "LoadingPhase": "PostConfigInit"
+      },
+      {
+         "Name": "OSECore",
+         "Type": "Runtime",
+         "LoadingPhase": "PreDefault",
+         "AdditionalDependencies": [
+            "OSERenderer"
+         ]
+      },
+      {
+         "Name": "OnlineSubsystemOSE",
+         "Type": "Runtime",
+         "LoadingPhase": "PreDefault"
+      },
+      {
+         "Name": "OSECoreEditor",
+         "Type": "Editor",
+         "LoadingPhase": "PreDefault",
+         "AdditionalDependencies": [
+            "OSECore"
+         ]
+      }
+   ],
+   "Plugins": [
+      {
+         "Name": "GameplayAbilities",
+         "Enabled": true
+      },
+      {
+         "Name": "OnlineSubsystem",
+         "Enabled": true
+      },
+      {
+         "Name": "OnlineSubsystemNull",
+         "Enabled": true
+      },
+      {
+         "Name": "OnlineSubsystemUtils",
+         "Enabled": true
+      },
+      {
+         "Name": "OnlineSubsystemSteam",
+         "Enabled": true,
+         "SupportedTargetPlatforms": [
+            "Linux",
+            "Mac",
+            "Win64"
+         ]
+      },
+      {
+         "Name": "DataValidation",
+         "Enabled": true
+      },
+      {
+         "Name": "Paper2D",
+         "Enabled": true
+      },
+      {
+         "Name": "CableComponent",
+         "Enabled": true
+      },
+      {
+         "Name": "Niagara",
+         "Enabled": true
+      },
+      {
+         "Name": "EnvironmentQueryEditor",
+         "Enabled": true
+      },
+      {
+         "Name": "OnlineSubsystemPS5",
+         "Enabled": true,
+         "SupportedTargetPlatforms": [
+            "PS5"
+         ],
+         "PlatformAllowList": [
+            "PS5"
+         ]
+      },
+      {
+         "Name": "EnhancedInput",
+         "Enabled": true
+      },
+      {
+         "Name": "WWise",
+         "Enabled": true
+      },
+      {
+         "Name": "SmartObjects",
+         "Enabled": true
+      },
+      {
+         "Name": "GameplayBehaviors",
+         "Enabled": true
+      },
+      {
+         "Name": "MotionWarping",
+         "Enabled": true
+      },
+      {
+         "Name": "CommonUI",
+         "Enabled": true
+      }
+      ]
+}

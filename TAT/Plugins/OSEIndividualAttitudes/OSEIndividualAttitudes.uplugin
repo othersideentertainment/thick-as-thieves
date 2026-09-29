@@ -1,0 +1,28 @@
+﻿{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "[OSE] Individual Attitudes",
+	"Description": "",
+   "Category": "OSE",
+   "CreatedBy": "OtherSide Entertainment",
+   "CreatedByURL": "https://otherside-e.com",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "OSEIndividualAttitudes",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "OSEIndividualAttitudesDebug",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}

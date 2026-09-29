@@ -1,0 +1,41 @@
+{
+   "FileVersion": 3,
+   "Version": 1,
+   "VersionName": "1.0",
+   "FriendlyName": "[OSE] BugReporter",
+   "Description": "Otherside Core Code/Assets",
+   "Category": "OSE",
+   "CreatedBy": "OtherSide Entertainment",
+   "CreatedByURL": "https://otherside-e.com",
+   "DocsURL": "",
+   "MarketplaceURL": "",
+   "SupportURL": "",
+   "CanContainContent": true,
+   "IsBetaVersion": false,
+   "IsExperimentalVersion": false,
+   "Installed": false,
+   "Modules": [
+      {
+         "Name": "OSEBugReporter",
+         "Type": "Runtime",
+         "LoadingPhase": "Default",
+         "AdditionalDependencies": [
+            "OSEVersion"
+         ]
+      }
+   ],
+   "Plugins": [
+      {
+         "Name": "OSEVersion",
+         "Enabled": true
+      },
+      {
+         "Name": "OSECore",
+         "Enabled": true
+      },
+      {
+         "Name": "GameplayAbilities",
+         "Enabled": true
+      }     
+   ]
+}

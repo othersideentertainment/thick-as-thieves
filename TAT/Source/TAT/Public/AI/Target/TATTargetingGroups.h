@@ -1,0 +1,17 @@
+// (c) 2018-2023 OtherSide Entertainment, Inc
+// SPDX-License-Identifier: MIT
+#pragma once
+
+// ue5
+#include "NativeGameplayTags.h"
+
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_AI_TargetingGroup_Melee)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_AI_TargetingGroup_SmartObject)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_AI_TargetingGroup_SmartObject_Ambient)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_AI_TargetingGroup_SmartObject_IncorrectState)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_AI_TargetingGroup_SmartObject_BrokenObject)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_AI_TargetingGroup_SmartObject_Alarm)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_AI_TargetingGroup_SmartObject_PlayerTool)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_AI_TargetingGroup_SmartObject_MajorLoot)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_AI_TargetingGroup_SmartObject_MajorLootReturn_HasSpace)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_AI_TargetingGroup_SmartObject_MajorLootReturn_Full)

@@ -1,0 +1,28 @@
+{
+	"FileVersion": 1,
+	"FriendlyName": "Wwise Low-Level SoundEngine",
+	"Version": 202413614,
+	"VersionName": "2024.1.4.8780.3614",
+	"CreatedBy": "Audiokinetic, Inc.",
+	"CreatedByURL": "http://audiokinetic.com",
+	"Description": "Wwise Low-Level SoundEngine",
+	"Category": "Audio",
+	"EnabledByDefault": true,
+	"Modules": [
+		{
+			"Name": "WwiseAuthoring",
+			"Type": "Editor",
+			"LoadingPhase": "None"
+		},
+		{
+			"Name": "WwiseLowLevelUtils",
+			"Type": "Runtime",
+			"LoadingPhase": "None"
+		},
+		{
+			"Name": "WwiseSoundEngine",
+			"Type": "Runtime",
+			"LoadingPhase": "None"
+		}
+	]
+}

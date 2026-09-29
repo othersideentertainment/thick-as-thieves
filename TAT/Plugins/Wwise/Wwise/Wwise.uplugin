@@ -1,0 +1,135 @@
+{
+	"FileVersion": 1,
+	"FriendlyName": "Wwise Unreal Engine Integration",
+	"Version": 202413614,
+	"VersionName": "2024.1.4.8780.3614",
+	"CreatedBy": "Audiokinetic, Inc.",
+	"CreatedByURL": "http://audiokinetic.com",
+	"Description": "Wwise integration for Unreal Engine",
+	"Category": "Audio",
+	"EnabledByDefault": true,
+	"Modules": [
+		{
+			"Name": "Wwise",
+			"Type": "Runtime",
+			"LoadingPhase": "PreLoadingScreen"
+		},
+		{
+			"Name": "AkAudio",
+			"Type": "Runtime",
+			"LoadingPhase": "None"
+		},
+		{
+			"Name": "AkAudioMixer",
+			"Type": "Runtime",
+			"LoadingPhase": "None"
+		},
+		{
+			"Name": "AudiokineticTools",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "WwiseAudioLinkEditor",
+			"Type": "Editor",
+			"LoadingPhase": "None"
+		},
+		{
+			"Name": "WwiseAudioLinkRuntime",
+			"Type": "Runtime",
+			"LoadingPhase": "None"
+		},
+		{
+			"Name": "WwiseConcurrency",
+			"Type": "Runtime",
+			"LoadingPhase": "None"
+		},
+		{
+			"Name": "WwiseEditorUtils",
+			"Type": "Editor",
+			"LoadingPhase": "None"
+		},
+		{
+			"Name": "WwiseEngineUtils",
+			"Type": "Runtime",
+			"LoadingPhase": "None"
+		},
+		{
+			"Name": "WwiseFileHandler",
+			"Type": "Runtime",
+			"LoadingPhase": "None"
+		},
+		{
+			"Name": "WwiseObjectUtils",
+			"Type": "Runtime",
+			"LoadingPhase": "None"
+		},
+		{
+			"Name": "WwiseObstructionOcclusion",
+			"Type": "Runtime",
+			"LoadingPhase": "None"
+		},
+		{
+			"Name": "WwisePackaging",
+			"Type": "Runtime",
+			"LoadingPhase": "None"
+		},
+		{
+			"Name": "WwisePackagingEditor",
+			"Type": "Editor",
+			"LoadingPhase": "None"
+		},
+		{
+			"Name": "WwisePackagingRuntime",
+			"Type": "Runtime",
+			"LoadingPhase": "None"
+		},
+		{
+			"Name": "WwiseProcessing",
+			"Type": "Runtime",
+			"LoadingPhase": "None"
+		},
+		{
+			"Name": "WwiseProjectDatabase",
+			"Type": "UncookedOnly",
+			"LoadingPhase": "None"
+		},
+		{
+			"Name": "WwiseReconcile",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "WwiseResourceCooker",
+			"Type": "UncookedOnly",
+			"LoadingPhase": "None"
+		},
+		{
+			"Name": "WwiseResourceLoader",
+			"Type": "Runtime",
+			"LoadingPhase": "None"
+		},
+		{
+			"Name": "WwiseSimpleExternalSource",
+			"Type": "Runtime",
+			"LoadingPhase": "None"
+		},
+		{
+			"Name": "WwiseUtils",
+			"Type": "Runtime",
+			"LoadingPhase": "None"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "GeometryMode",
+			"Enabled": true
+		},
+		{
+			"Name": "WwiseSoundEngine",
+			"Enabled": true
+		}
+	],
+
+	"CanContainContent": true
+}

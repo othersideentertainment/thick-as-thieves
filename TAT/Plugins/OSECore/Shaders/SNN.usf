@@ -1,0 +1,254 @@
+// (c) 2021-2023 OtherSide Entertainment, Inc
+// SPDX-License-Identifier: MIT
+
+#include "/Engine/Private/Common.ush"
+#include "/Engine/Private/PostProcessCommon.ush"
+#include "/Engine/Private/ScreenPass.ush"
+#include "/Engine/Private/Random.ush"
+#include "/Engine/Private/BlueNoise.ush"
+#include "/Engine/Private/ColorSpace.ush"
+#include "/Engine/Private/SceneTexturesCommon.ush"
+#include "/Engine/Private/DeferredShadingCommon.ush"
+
+// OSE
+#include "/Plugin/OSECore/Common/ColorUtils.ush"
+
+
+//--------------------------------------------------------------------------------------------------
+/// Permutations
+//--------------------------------------------------------------------------------------------------
+
+#ifndef SNN_ENABLE_PASS_NEAREST
+#define SNN_ENABLE_PASS_NEAREST ( 1 )
+#endif
+
+#ifndef SNN_ENABLE_PASS_DISTANT
+#define SNN_ENABLE_PASS_DISTANT ( 1 )
+#endif
+
+
+//--------------------------------------------------------------------------------------------------
+/// Parameters
+//--------------------------------------------------------------------------------------------------
+
+#if ( SNN_ENABLE_PASS_NEAREST )
+   // Parameter: SNN.Nearest
+   float SNN_Nearest_Amt; // =  1.0f;
+   float SNN_Nearest_Exp; // =  1.0f;
+   float SNN_Nearest_Dst; // =  4.0f;
+#endif // SNN_ENABLE_PASS_NEAREST
+
+#if ( SNN_ENABLE_PASS_DISTANT )
+   // Parameter: SNN.Distant
+   float SNN_Distant_Amt; // =  1.0f;
+   float SNN_Distant_Exp; // =  1.0f;
+   float SNN_Distant_Dst; // =  4.0f;
+#endif // SNN_ENABLE_PASS_NEAREST
+
+// Parameter: Input0 (Color)
+SCREEN_PASS_TEXTURE_VIEWPORT(Input0_Viewport)
+FScreenTransform Input0_ToOutput;
+Texture2D Input0_Texture;
+SamplerState Input0_Sampler;
+
+// Parameter: Input1 (Depth)
+SCREEN_PASS_TEXTURE_VIEWPORT(Input1_Viewport)
+FScreenTransform Input1_ToOutput;
+Texture2D Input1_Texture;
+SamplerState Input1_Sampler;
+
+
+//--------------------------------------------------------------------------------------------------
+/// Definitions and macros
+//--------------------------------------------------------------------------------------------------
+
+#define SNN_SKY_DISTANCE      1e5
+#define SNN_TEMPORAL_INDEX    View.StateFrameIndexMod8
+
+#define SNN_EXTENT_INV( input ) \
+   input ## _Viewport_ExtentInverse
+
+#define SNN_CLAMP_COORD( input, coord ) \
+   clamp( (coord), input ## _Viewport_UVViewportBilinearMin, input ## _Viewport_UVViewportBilinearMax )
+
+#define SNN_SAMPLE_TEX( input, coord ) \
+   Texture2DSample( input ## _Texture, input ## _Sampler, SNN_CLAMP_COORD( input, coord ) )
+
+#define SNN_SAMPLE_COLOR_TEX( coord )     SNN_SAMPLE_TEX( Input0, coord )
+#define SNN_SAMPLE_DEPTH_TEX( coord )     SNN_SAMPLE_TEX( Input1, coord )
+#define SNN_SAMPLE_DEVICE_Z( coord )      SNN_SAMPLE_DEPTH_TEX( coord ).r
+#define SNN_SAMPLE_SCENE_DEPTH( coord )   ConvertFromDeviceZ( SNN_SAMPLE_DEVICE_Z( coord ) )
+
+
+//--------------------------------------------------------------------------------------------------
+/// Configurable comparison method for modified SNN. This uses yCbCr to incorporate chroma AND
+/// luminance changes, more in-line with a simpler Kuwahara filter.
+//--------------------------------------------------------------------------------------------------
+
+float4 SNN_Select(
+   in float4 valueBase,
+   in float4 valueSample0,
+   in float4 valueSample1 )
+{
+   // @TODO: If this is called from a different point in the pipeline (i.e. post tone mapping)
+   // will need to update to call the sRGB versions instead.
+   const float3 base = LinearRGB_2_yCbCr( valueBase.xyz );
+   const float3 sam0 = LinearRGB_2_yCbCr( valueSample0.xyz );
+   const float3 sam1 = LinearRGB_2_yCbCr( valueSample1.xyz );
+
+   const float3 sub0 = base - sam0;
+   const float3 sub1 = base - sam1;
+   
+   const float d0 = max( abs( sub0.x ), dot( sub0.yz, sub0.yz ) );
+   const float d1 = max( abs( sub1.x ), dot( sub1.yz, sub1.yz ) );
+
+   return ( d0 < d1 ) ? valueSample0 : valueSample1;
+}
+
+
+float4 SNN_SampleBlock( in float2 baseCoord, in float4 baseValue, in float pixelRadius )
+{
+   const float2 uvDelta = SNN_EXTENT_INV( Input0 );
+
+   // Radius
+   const int radius = int(pixelRadius);
+   if ( radius <= 0 )
+      return baseValue;
+
+   float4 result = 0;
+   float sum = 0;
+   
+   // Horizontal row
+   for ( int i = 1; i <= radius; ++i )
+   {
+      const float2 uv0 = baseCoord + ( float2( +i, 0 ) * uvDelta );
+      const float2 uv1 = baseCoord + ( float2( -i, 0 ) * uvDelta );
+
+      const float4 c0 = SNN_SAMPLE_COLOR_TEX( uv0 );
+      const float4 c1 = SNN_SAMPLE_COLOR_TEX( uv1 );
+      
+      result += SNN_Select( baseValue, c0, c1 );
+      sum += 1.0.x;
+   }
+
+   // Upper block
+   for ( int i = -radius; i <= radius; ++i )
+   {
+      for ( int j = 1; j <= radius; ++j )
+      {
+         const float2 uv0 = baseCoord + ( float2( +i, +j ) * uvDelta );
+         const float2 uv1 = baseCoord + ( float2( -i, -j ) * uvDelta );
+
+         const float4 c0 = SNN_SAMPLE_COLOR_TEX( uv0 );
+         const float4 c1 = SNN_SAMPLE_COLOR_TEX( uv1 );
+
+         result += SNN_Select( baseValue, c0, c1 );
+         sum += 1.0.x;
+      }
+   }
+
+   return result / sum.xxxx;
+}
+
+// Returns a 0..1 weight value for the SNN effect based on the g-buffer.
+// This allows custom data overrides to "mask" the SNN effect, if enabled.
+float GetSNNWeightGBuffer( const FScreenSpaceData inScreenDataBase )
+{
+#if PROJECT_ALLOW_CUSTOMDATA_BY_DEFAULT
+   if ( inScreenDataBase.GBuffer.ShadingModelID == SHADINGMODELID_DEFAULT_LIT )
+   {
+      return 1.0f - saturate( inScreenDataBase.GBuffer.CustomData.x );
+   }
+#endif // PROJECT_ALLOW_CUSTOMDATA_BY_DEFAULT
+   
+   return 1;
+}
+
+
+void FinalPS(
+   in noperspective float4 UVAndScreenPos : TEXCOORD0,
+   in float4 InSvPosition : SV_POSITION,
+   out float4 OutColor : SV_Target0 )
+{
+   float2 texCoord0 = ApplyScreenTransform( UVAndScreenPos.xy, Input0_ToOutput );
+   float2 texCoord1 = ApplyScreenTransform( UVAndScreenPos.xy, Input1_ToOutput );
+   
+   // Buffer coordinates for g-buffer data (usually the same as above, but not necessarily)
+   const float2 bufferCoord = SvPositionToBufferUV( InSvPosition );
+   const float2 bufferExtInv = View.BufferSizeAndInvSize.zw;
+
+   // Only normalize the G-buffer normal if we need it
+   const bool normalizeGBufferNormal = false;
+   const FScreenSpaceData screenDataBase = GetScreenSpaceData( bufferCoord, normalizeGBufferNormal );
+   
+   // G-buffer SNN weight
+   const float weightGBuffer = GetSNNWeightGBuffer( screenDataBase );
+   
+   const float deviceZ = SNN_SAMPLE_DEVICE_Z( texCoord1 );
+   const float sceneDepth = ConvertFromDeviceZ( deviceZ );
+   const float2 uvDeltaDepth = SNN_EXTENT_INV( Input1 );
+
+   const float3 camRelPos = SvPositionToTranslatedWorld( float4( InSvPosition.xy, deviceZ, 1 ) );
+   const float camDistanceBase = length( camRelPos );
+
+   const float2 worldDistFactorXY = ( View.ViewSizeAndInvSize.xy * 0.5.xx ) / ( camDistanceBase.xx * GetTanHalfFieldOfView() );
+   const float worldDistFactor = worldDistFactorXY.x;
+
+   const float distanceMask = (camDistanceBase > SNN_SKY_DISTANCE) ? 0 : 1;
+   float finalBlend = distanceMask;
+   
+   const float4 sceneColor = SNN_SAMPLE_COLOR_TEX( texCoord0 );
+   float4 finalColor = sceneColor;
+   
+#if SNN_ENABLE_PASS_DISTANT
+   {
+      const float2 noiseVector = normalize( float2(1,2) + normalize( BlueNoiseVec2( InSvPosition.xy, SNN_TEMPORAL_INDEX ) * 2.0.xx - 1.0.xx ) );
+   
+      // @TODO parameterize
+      const float noiseRadius = 1.0 * min( 10, (1.0/worldDistFactor) * (1.0/100.0) );//lerp( 7, 0, saturate( worldDistFactor * 4 ) );
+      const float2 noiseValue = noiseVector * uvDeltaDepth * noiseRadius.xx;
+      
+      const float offset_sceneDepth_0 = SNN_SAMPLE_SCENE_DEPTH( texCoord1 + noiseValue );
+      const float offset_sceneDepth_1 = SNN_SAMPLE_SCENE_DEPTH( texCoord1 - noiseValue );
+
+      const float depthDiff_0 = max( 0, sceneDepth - offset_sceneDepth_0 );//abs( sceneDepth - offset_sceneDepth_0 );
+      const float depthDiff_1 = max( 0, sceneDepth - offset_sceneDepth_1 );//abs( sceneDepth - offset_sceneDepth_1 );
+      const float depthDiff   = max( depthDiff_0, depthDiff_1 );
+      
+      // @TODO parameterize
+      const float depthFactor = pow( saturate( ( depthDiff / 100 ) ), 1 );
+      const float2 coordOffset = noiseValue * depthFactor;
+         
+      const float4 color0 = SNN_SAMPLE_COLOR_TEX( texCoord0 + coordOffset );
+      const float4 color1 = SNN_SAMPLE_COLOR_TEX( texCoord0 - coordOffset );
+      
+
+      finalColor = SNN_Select( finalColor, color0, color1 );
+      finalBlend = saturate( max( distanceMask, depthFactor ) );
+      
+      /*
+      const float4 colorA = SNN_SAMPLE_COLOR_TEX( texCoord0 + noiseValue );
+      const float4 colorB = SNN_SAMPLE_COLOR_TEX( texCoord0 - noiseValue );
+      finalColor = depthDiff_0 > depthDiff_1 ? colorA : colorB;
+      */
+
+      //finalColor = depthFactor;
+      //finalColor = noiseRadius / 5;
+      //finalBlend = 1;
+   }
+#endif
+   
+#if SNN_ENABLE_PASS_NEAREST
+   {   
+      // @TODO parameterize
+      const float radius = lerp( 3, 1, saturate( worldDistFactor * 0.25 ) );
+      finalColor = SNN_SampleBlock( texCoord0, finalColor, radius );
+      //finalBlend = distanceMask;
+   }
+#endif
+   
+   // Apply G-Buffer weight mask
+   finalBlend *= weightGBuffer;
+   
+   OutColor = lerp( sceneColor, finalColor, finalBlend.xxxx );
+}

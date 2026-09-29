@@ -1,0 +1,22 @@
+[
+(u'torso', [u'pelvis_1p', u'spine_01_1p', u'spine_02_1p', u'spine_03_1p']),
+(u'shoulder_L', [u'clavicle_l_1p']),
+(u'shoulder_R', [u'clavicle_r_1p']),
+(u'arm_L', [u'upperarm_l_1p', u'lowerarm_l_1p', u'hand_l_1p']),
+(u'arm_R', [u'upperarm_r_1p', u'lowerarm_r_1p', u'hand_r_1p']),
+(u'hand_L', [u'hand_l_1p', u'index_metacarpal_l_1p', u'middle_metacarpal_l_1p', u'ring_metacarpal_l_1p', u'pinky_metacarpal_l_1p']),
+(u'thumb_L', [u'thumb_01_l_1p', u'thumb_02_l_1p', u'thumb_03_l_1p']),
+(u'index_L', [u'index_01_l_1p', u'index_02_l_1p', u'index_03_l_1p']),
+(u'middle_L', [u'middle_01_l_1p', u'middle_02_l_1p', u'middle_03_l_1p']),
+(u'ring_L', [u'ring_01_l_1p', u'ring_02_l_1p', u'ring_03_l_1p']),
+(u'pinky_L', [u'pinky_01_l_1p', u'pinky_02_l_1p', u'pinky_03_l_1p']),
+(u'hand_R', [u'hand_r_1p', u'index_metacarpal_r_1p', u'middle_metacarpal_r_1p', u'ring_metacarpal_r_1p', u'pinky_metacarpal_r_1p']),
+(u'thumb_R', [u'thumb_01_r_1p', u'thumb_02_r_1p', u'thumb_03_r_1p']),
+(u'index_R', [u'index_01_r_1p', u'index_02_r_1p', u'index_03_r_1p']),
+(u'middle_R', [u'middle_01_r_1p', u'middle_02_r_1p', u'middle_03_r_1p']),
+(u'ring_R', [u'ring_01_r_1p', u'ring_02_r_1p', u'ring_03_r_1p']),
+(u'pinky_R', [u'pinky_01_r_1p', u'pinky_02_r_1p', u'pinky_03_r_1p']),
+(u'weapon_L', [u'weapon_l_1p']),
+(u'weapon_R', [u'weapon_r_1p']),
+(u'camera', [u'camera_1p'])
+]

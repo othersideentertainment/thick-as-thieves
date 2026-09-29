@@ -1,0 +1,1 @@
+"..\..\..\Engine\Binaries\Win64\UnrealEditor-Win64-DebugGame.exe" %CD%\..\..\TAT.uproject

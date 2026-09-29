@@ -1,0 +1,961 @@
+{
+    "name": "RTGT_Source", 
+    "module_data": [
+        {
+            "type": "Placement", 
+            "name": "placement", 
+            "side": 0
+        }, 
+        {
+            "type": "Head", 
+            "name": "head", 
+            "side": 0
+        }, 
+        {
+            "type": "Torso", 
+            "name": "torso", 
+            "side": 0
+        }, 
+        {
+            "type": "Shoulder", 
+            "name": "shoulder_L", 
+            "side": 1
+        }, 
+        {
+            "type": "Shoulder", 
+            "name": "shoulder_R", 
+            "side": 2
+        }, 
+        {
+            "type": "Arm", 
+            "name": "arm_L", 
+            "side": 1
+        }, 
+        {
+            "type": "Arm", 
+            "name": "arm_R", 
+            "side": 2
+        }, 
+        {
+            "type": "Hand", 
+            "name": "hand_L", 
+            "side": 1
+        }, 
+        {
+            "type": "Hand", 
+            "name": "hand_R", 
+            "side": 2
+        }, 
+        {
+            "type": "Leg", 
+            "name": "leg_L", 
+            "side": 1
+        }, 
+        {
+            "type": "Leg", 
+            "name": "leg_R", 
+            "side": 2
+        }, 
+        {
+            "type": "Prop", 
+            "name": "weapon_L", 
+            "side": 0
+        }, 
+        {
+            "type": "Prop", 
+            "name": "weapon_R", 
+            "side": 0
+        }
+    ], 
+    "bone_data": [
+        {
+            "bones": [
+                "|root"
+            ], 
+            "name": "placement"
+        }, 
+        {
+            "bones": [
+                "|root|pelvis|spine_01|spine_02|spine_03|neck_01", 
+                "|root|pelvis|spine_01|spine_02|spine_03|neck_01|head"
+            ], 
+            "name": "head"
+        }, 
+        {
+            "bones": [
+                "|root|pelvis", 
+                "|root|pelvis|spine_01", 
+                "|root|pelvis|spine_01|spine_02", 
+                "|root|pelvis|spine_01|spine_02|spine_03"
+            ], 
+            "name": "torso"
+        }, 
+        {
+            "bones": [
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l"
+            ], 
+            "name": "shoulder_L"
+        }, 
+        {
+            "bones": [
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r"
+            ], 
+            "name": "shoulder_R"
+        }, 
+        {
+            "bones": [
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l|hand_l"
+            ], 
+            "name": "arm_L"
+        }, 
+        {
+            "bones": [
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r|hand_r"
+            ], 
+            "name": "arm_R"
+        }, 
+        {
+            "bones": [
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l|hand_l", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l|hand_l|index_metacarpal_l", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l|hand_l|middle_metacarpal_l", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l|hand_l|ring_metacarpal_l", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l|hand_l|pinky_metacarpal_l"
+            ], 
+            "name": "hand_L"
+        }, 
+        {
+            "bones": [
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l|hand_l|thumb_01_l", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l|hand_l|thumb_01_l|thumb_02_l", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l|hand_l|thumb_01_l|thumb_02_l|thumb_03_l"
+            ], 
+            "name": "thumb_L"
+        }, 
+        {
+            "bones": [
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l|hand_l|index_metacarpal_l|index_01_l", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l|hand_l|index_metacarpal_l|index_01_l|index_02_l", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l|hand_l|index_metacarpal_l|index_01_l|index_02_l|index_03_l"
+            ], 
+            "name": "index_L"
+        }, 
+        {
+            "bones": [
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l|hand_l|middle_metacarpal_l|middle_01_l", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l|hand_l|middle_metacarpal_l|middle_01_l|middle_02_l", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l|hand_l|middle_metacarpal_l|middle_01_l|middle_02_l|middle_03_l"
+            ], 
+            "name": "middle_L"
+        }, 
+        {
+            "bones": [
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l|hand_l|ring_metacarpal_l|ring_01_l", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l|hand_l|ring_metacarpal_l|ring_01_l|ring_02_l", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l|hand_l|ring_metacarpal_l|ring_01_l|ring_02_l|ring_03_l"
+            ], 
+            "name": "ring_L"
+        }, 
+        {
+            "bones": [
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l|hand_l|pinky_metacarpal_l|pinky_01_l", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l|hand_l|pinky_metacarpal_l|pinky_01_l|pinky_02_l", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l|hand_l|pinky_metacarpal_l|pinky_01_l|pinky_02_l|pinky_03_l"
+            ], 
+            "name": "pinky_L"
+        }, 
+        {
+            "bones": [
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r|hand_r", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r|hand_r|index_metacarpal_r", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r|hand_r|middle_metacarpal_r", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r|hand_r|ring_metacarpal_r", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r|hand_r|pinky_metacarpal_r"
+            ], 
+            "name": "hand_R"
+        }, 
+        {
+            "bones": [
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r|hand_r|thumb_01_r", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r|hand_r|thumb_01_r|thumb_02_r", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r|hand_r|thumb_01_r|thumb_02_r|thumb_03_r"
+            ], 
+            "name": "thumb_R"
+        }, 
+        {
+            "bones": [
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r|hand_r|index_metacarpal_r|index_01_r", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r|hand_r|index_metacarpal_r|index_01_r|index_02_r", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r|hand_r|index_metacarpal_r|index_01_r|index_02_r|index_03_r"
+            ], 
+            "name": "index_R"
+        }, 
+        {
+            "bones": [
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r|hand_r|middle_metacarpal_r|middle_01_r", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r|hand_r|middle_metacarpal_r|middle_01_r|middle_02_r", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r|hand_r|middle_metacarpal_r|middle_01_r|middle_02_r|middle_03_r"
+            ], 
+            "name": "middle_R"
+        }, 
+        {
+            "bones": [
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r|hand_r|ring_metacarpal_r|ring_01_r", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r|hand_r|ring_metacarpal_r|ring_01_r|ring_02_r", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r|hand_r|ring_metacarpal_r|ring_01_r|ring_02_r|ring_03_r"
+            ], 
+            "name": "ring_R"
+        }, 
+        {
+            "bones": [
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r|hand_r|pinky_metacarpal_r|pinky_01_r", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r|hand_r|pinky_metacarpal_r|pinky_01_r|pinky_02_r", 
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r|hand_r|pinky_metacarpal_r|pinky_01_r|pinky_02_r|pinky_03_r"
+            ], 
+            "name": "pinky_R"
+        }, 
+        {
+            "bones": [
+                "|root|pelvis|thigh_l", 
+                "|root|pelvis|thigh_l|calf_l", 
+                "|root|pelvis|thigh_l|calf_l|foot_l", 
+                "|root|pelvis|thigh_l|calf_l|foot_l|ball_l"
+            ], 
+            "name": "leg_L"
+        }, 
+        {
+            "bones": [
+                "|root|pelvis|thigh_r", 
+                "|root|pelvis|thigh_r|calf_r", 
+                "|root|pelvis|thigh_r|calf_r|foot_r", 
+                "|root|pelvis|thigh_r|calf_r|foot_r|ball_r"
+            ], 
+            "name": "leg_R"
+        }, 
+        {
+            "bones": [
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_l|upperarm_l|lowerarm_l|hand_l|weapon_l"
+            ], 
+            "name": "weapon_L"
+        }, 
+        {
+            "bones": [
+                "|root|pelvis|spine_01|spine_02|spine_03|clavicle_r|upperarm_r|lowerarm_r|hand_r|weapon_r"
+            ], 
+            "name": "weapon_R"
+        }
+    ], 
+    "marker_data": [
+        {
+            "rotation_offsets": [
+                [
+                    0.0, 
+                    0.0, 
+                    0.0
+                ]
+            ], 
+            "name": "placement", 
+            "rest_positions": [
+                [
+                    0.0, 
+                    0.0, 
+                    0.0
+                ]
+            ]
+        }, 
+        {
+            "rotation_offsets": [
+                [
+                    -3.479168914970324e-14, 
+                    1.0227854943327903e-14, 
+                    2.253701345013996
+                ], 
+                [
+                    -1.2721373135685114e-14, 
+                    -1.4667941621424286e-16, 
+                    -1.3211999999999948
+                ]
+            ], 
+            "name": "head", 
+            "rest_positions": [
+                [
+                    2.0194839173657902e-28, 
+                    156.42330932617188, 
+                    -5.8721513748168945
+                ], 
+                [
+                    1.9185096974233764e-28, 
+                    165.51905822753906, 
+                    -3.976306676864624
+                ]
+            ]
+        }, 
+        {
+            "rotation_offsets": [
+                [
+                    1.931870650614202e-14, 
+                    -5.605774005498766e-15, 
+                    -4.507255810270043
+                ], 
+                [
+                    -3.227945857271686e-14, 
+                    -3.176959986736271e-15, 
+                    11.377913508266559
+                ], 
+                [
+                    -4.7602879654802154e-14, 
+                    7.107276503550992e-15, 
+                    1.7941796825157017
+                ], 
+                [
+                    -1.2678701553258891e-14, 
+                    -1.0513687420988437e-15, 
+                    -9.480699999999999
+                ]
+            ], 
+            "name": "torso", 
+            "rest_positions": [
+                [
+                    2.0194839474584456e-29, 
+                    96.75203704833984, 
+                    -1.0562916994094849
+                ], 
+                [
+                    1.7670484276950664e-28, 
+                    107.55764770507812, 
+                    -0.16495534777641296
+                ], 
+                [
+                    6.058451992838614e-29, 
+                    126.76484680175781, 
+                    -1.513347864151001
+                ], 
+                [
+                    1.161203228411205e-28, 
+                    140.03224182128906, 
+                    -3.4951019287109375
+                ]
+            ]
+        }, 
+        {
+            "rotation_offsets": [
+                [
+                    0.0, 
+                    0.0, 
+                    0.0
+                ]
+            ], 
+            "name": "shoulder_L", 
+            "rest_positions": [
+                [
+                    3.7799999713897705, 
+                    152.20480346679688, 
+                    -2.7587156295776367
+                ]
+            ]
+        }, 
+        {
+            "rotation_offsets": [
+                [
+                    0.0, 
+                    0.0, 
+                    0.0
+                ]
+            ], 
+            "name": "shoulder_R", 
+            "rest_positions": [
+                [
+                    -3.7800185680389404, 
+                    152.20480346679688, 
+                    -2.7587215900421143
+                ]
+            ]
+        }, 
+        {
+            "rotation_offsets": [
+                [
+                    -0.33556407819880885, 
+                    -0.002611923158130861, 
+                    0.0028382621157469383
+                ], 
+                [
+                    5.631121905678745, 
+                    0.004107267948142553, 
+                    0.0001269349615723459
+                ], 
+                [
+                    81.53013341390493, 
+                    -2.6717968242893444, 
+                    6.027275471324438
+                ]
+            ], 
+            "name": "arm_L", 
+            "rest_positions": [
+                [
+                    17.700054168701172, 
+                    149.5338134765625, 
+                    -9.712118148803711
+                ], 
+                [
+                    47.92334747314453, 
+                    149.5338134765625, 
+                    -12.356313705444336
+                ], 
+                [
+                    74.793701171875, 
+                    149.5338134765625, 
+                    -10.005461692810059
+                ]
+            ]
+        }, 
+        {
+            "rotation_offsets": [
+                [
+                    -0.33556750407996966, 
+                    -0.0026086095692943348, 
+                    0.0028459601389333932
+                ], 
+                [
+                    5.631114962112058, 
+                    0.004104721302276961, 
+                    7.248038513712442e-05
+                ], 
+                [
+                    81.53014076570665, 
+                    -2.671767693343911, 
+                    6.027116836910587
+                ]
+            ], 
+            "name": "arm_R", 
+            "rest_positions": [
+                [
+                    -17.700014114379883, 
+                    149.5338134765625, 
+                    -9.712114334106445
+                ], 
+                [
+                    -47.92330551147461, 
+                    149.5338134765625, 
+                    -12.35630989074707
+                ], 
+                [
+                    -74.79365539550781, 
+                    149.5338134765625, 
+                    -10.00545883178711
+                ]
+            ]
+        }, 
+        {
+            "rotation_offsets": [], 
+            "name": "hand_L", 
+            "rest_positions": []
+        }, 
+        {
+            "rotation_offsets": [
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ], 
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ], 
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ]
+            ], 
+            "name": "thumb_L", 
+            "rest_positions": [
+                [
+                    79.65516662597656, 
+                    147.28550720214844, 
+                    -7.540647029876709
+                ], 
+                [
+                    82.4314956665039, 
+                    145.82566833496094, 
+                    -5.2747063636779785
+                ], 
+                [
+                    85.64759826660156, 
+                    143.70513916015625, 
+                    -3.9841713905334473
+                ]
+            ]
+        }, 
+        {
+            "rotation_offsets": [
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ], 
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ], 
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ]
+            ], 
+            "name": "index_L", 
+            "rest_positions": [
+                [
+                    86.86720275878906, 
+                    148.65916442871094, 
+                    -7.428975582122803
+                ], 
+                [
+                    90.90508270263672, 
+                    147.25743103027344, 
+                    -7.733487129211426
+                ], 
+                [
+                    93.80741119384766, 
+                    145.57894897460938, 
+                    -8.280242919921875
+                ]
+            ]
+        }, 
+        {
+            "rotation_offsets": [
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ], 
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ], 
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ]
+            ], 
+            "name": "middle_L", 
+            "rest_positions": [
+                [
+                    87.11723327636719, 
+                    149.5338134765625, 
+                    -10.005461692810059
+                ], 
+                [
+                    91.54425811767578, 
+                    148.2699432373047, 
+                    -10.559438705444336
+                ], 
+                [
+                    94.72725677490234, 
+                    146.55560302734375, 
+                    -11.060953140258789
+                ]
+            ]
+        }, 
+        {
+            "rotation_offsets": [
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ], 
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ], 
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ]
+            ], 
+            "name": "ring_L", 
+            "rest_positions": [
+                [
+                    86.53484344482422, 
+                    149.34283447265625, 
+                    -12.363228797912598
+                ], 
+                [
+                    90.7233657836914, 
+                    148.1617431640625, 
+                    -13.19638442993164
+                ], 
+                [
+                    93.69625091552734, 
+                    146.48590087890625, 
+                    -13.870613098144531
+                ]
+            ]
+        }, 
+        {
+            "rotation_offsets": [
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ], 
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ], 
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ]
+            ], 
+            "name": "pinky_L", 
+            "rest_positions": [
+                [
+                    85.32452392578125, 
+                    148.9726104736328, 
+                    -14.292621612548828
+                ], 
+                [
+                    88.64795684814453, 
+                    148.3040008544922, 
+                    -15.406723976135254
+                ], 
+                [
+                    91.26714324951172, 
+                    147.18081665039062, 
+                    -16.294979095458984
+                ]
+            ]
+        }, 
+        {
+            "rotation_offsets": [], 
+            "name": "hand_R", 
+            "rest_positions": []
+        }, 
+        {
+            "rotation_offsets": [
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ], 
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ], 
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ]
+            ], 
+            "name": "thumb_R", 
+            "rest_positions": [
+                [
+                    -79.65547180175781, 
+                    147.2852020263672, 
+                    -7.540832042694092
+                ], 
+                [
+                    -82.43123626708984, 
+                    145.82586669921875, 
+                    -5.274641036987305
+                ], 
+                [
+                    -85.64730072021484, 
+                    143.7054901123047, 
+                    -3.9840903282165527
+                ]
+            ]
+        }, 
+        {
+            "rotation_offsets": [
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ], 
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ], 
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ]
+            ], 
+            "name": "index_R", 
+            "rest_positions": [
+                [
+                    -86.86715698242188, 
+                    148.65914916992188, 
+                    -7.428983688354492
+                ], 
+                [
+                    -90.90502166748047, 
+                    147.2573699951172, 
+                    -7.733509540557861
+                ], 
+                [
+                    -93.80734252929688, 
+                    145.5789337158203, 
+                    -8.280242919921875
+                ]
+            ]
+        }, 
+        {
+            "rotation_offsets": [
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ], 
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ], 
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ]
+            ], 
+            "name": "middle_R", 
+            "rest_positions": [
+                [
+                    -87.11719512939453, 
+                    149.5338134765625, 
+                    -10.00545883178711
+                ], 
+                [
+                    -91.544189453125, 
+                    148.26992797851562, 
+                    -10.559428215026855
+                ], 
+                [
+                    -94.72724151611328, 
+                    146.55560302734375, 
+                    -11.060949325561523
+                ]
+            ]
+        }, 
+        {
+            "rotation_offsets": [
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ], 
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ], 
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ]
+            ], 
+            "name": "ring_R", 
+            "rest_positions": [
+                [
+                    -86.5347671508789, 
+                    149.3427276611328, 
+                    -12.363241195678711
+                ], 
+                [
+                    -90.72330474853516, 
+                    148.16165161132812, 
+                    -13.196401596069336
+                ], 
+                [
+                    -93.69615173339844, 
+                    146.4857940673828, 
+                    -13.87062931060791
+                ]
+            ]
+        }, 
+        {
+            "rotation_offsets": [
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ], 
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ], 
+                [
+                    90.0, 
+                    0.0, 
+                    0.0
+                ]
+            ], 
+            "name": "pinky_R", 
+            "rest_positions": [
+                [
+                    -85.32444763183594, 
+                    148.97259521484375, 
+                    -14.292608261108398
+                ], 
+                [
+                    -88.6478500366211, 
+                    148.303955078125, 
+                    -15.406705856323242
+                ], 
+                [
+                    -91.26698303222656, 
+                    147.18077087402344, 
+                    -16.294952392578125
+                ]
+            ]
+        }, 
+        {
+            "rotation_offsets": [
+                [
+                    -8.563491109598434, 
+                    -2.298522376977374e-05, 
+                    -6.204211235128116e-05
+                ], 
+                [
+                    -2.7624776856723643, 
+                    -0.001849956005776782, 
+                    0.0016977128348949987
+                ], 
+                [
+                    -4.04549820395032, 
+                    2.91319803288716, 
+                    58.46282178317064
+                ], 
+                [
+                    -1.8687751775834631, 
+                    4.628066374048745, 
+                    -177.45618986494534
+                ]
+            ], 
+            "name": "leg_L", 
+            "rest_positions": [
+                [
+                    9.00416088104248, 
+                    95.29811096191406, 
+                    -0.5298899412155151
+                ], 
+                [
+                    9.00416088104248, 
+                    52.743247985839844, 
+                    -1.8106440305709839
+                ], 
+                [
+                    9.00416088104248, 
+                    13.040929794311523, 
+                    -8.090178489685059
+                ], 
+                [
+                    9.00416088104248, 
+                    2.603611946105957, 
+                    8.503469467163086
+                ]
+            ]
+        }, 
+        {
+            "rotation_offsets": [
+                [
+                    -8.56349136195069, 
+                    -2.21989322774361e-05, 
+                    -6.422928046660732e-05
+                ], 
+                [
+                    -2.7624782348062613, 
+                    -0.0018343940759299009, 
+                    0.0017001033721335869
+                ], 
+                [
+                    -4.04548424138792, 
+                    2.913206092060129, 
+                    58.46282336415535
+                ], 
+                [
+                    -1.8687591522264808, 
+                    4.628065714557699, 
+                    -177.4561892021596
+                ]
+            ], 
+            "name": "leg_R", 
+            "rest_positions": [
+                [
+                    -9.00413703918457, 
+                    95.29810333251953, 
+                    -0.5298867225646973
+                ], 
+                [
+                    -9.00413703918457, 
+                    52.74323272705078, 
+                    -1.8106423616409302
+                ], 
+                [
+                    -9.00413703918457, 
+                    13.04091739654541, 
+                    -8.090174674987793
+                ], 
+                [
+                    -9.00413703918457, 
+                    2.6035985946655273, 
+                    8.503475189208984
+                ]
+            ]
+        }, 
+        {
+            "rotation_offsets": [
+                [
+                    0.0, 
+                    0.0, 
+                    0.0
+                ]
+            ], 
+            "name": "weapon_L", 
+            "rest_positions": [
+                [
+                    83.95106506347656, 
+                    143.628173828125, 
+                    -10.70600700378418
+                ]
+            ]
+        }, 
+        {
+            "rotation_offsets": [
+                [
+                    0.0, 
+                    0.0, 
+                    0.0
+                ]
+            ], 
+            "name": "weapon_R", 
+            "rest_positions": [
+                [
+                    -83.95100402832031, 
+                    143.62815856933594, 
+                    -10.706012725830078
+                ]
+            ]
+        }
+    ]
+}

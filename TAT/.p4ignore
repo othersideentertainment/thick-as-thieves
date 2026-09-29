@@ -1,0 +1,106 @@
+# Unreal Engine P4 Ignore File
+# Setup locally by running "p4 set P4IGNORE=p4ignore.txt"
+
+# Workspace Configuration File
+/workspace.txt
+/p4config.txt
+/efconfig.txt
+/Startup.bat
+
+# CVS Files
+.cvsignore
+.git/
+.gitattributes
+.gitmodules
+.hg_archival.txt
+.p4ignore.txt
+.p4ignore
+.p4config
+.tgitconfig
+
+# Base Project Folders
+obj/
+.idea/
+.vs/
+.vscode/
+.cache/
+cmake-build-debug/
+
+# Platform Files
+.DS_Store
+desktop.ini
+
+# Cache Files
+__pycache__/
+
+# ------------------------- BELOW FOR AFTER MERGE OF UE4 SOURCE
+
+
+# Unreal Special Folders
+Binaries/
+Build/
+DerivedDataCache/
+Intermediate/
+FileOpenOrder/
+Saved/
+Deploy/
+Staging/
+ContentBuilder/output/
+Breakpad.framework/
+
+# Additional Project Folders
+bin/
+
+
+# Project Files
+*.pdb
+*-Debug.*
+!*-Debug.bat
+*.sln
+*.csproj
+*.suo
+*.user
+*.userprefs
+*.VC.db
+*.VC.opendb
+*.xcodeproj
+*.xcworkspace
+*.code-workspace
+*.pkf
+*.log
+*.opensdf
+*.sdf
+Log.txt
+
+# Compiled Object Files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic Libraries (Forces User To Locally Generate Always)
+*.so
+*.dylib
+*.dll
+
+# Compiled Static Libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Steamworks
+ThirdParty/Steamworks/*
+!ThirdParty/Steamworks/DedicatedServer/*
+!*.vdf
+
+# Wwise
+AudioSrc/TAT/.backup/
+AudioSrc/TAT/.cache/
+AudioSrc/TAT/*.validationcache
+AudioSrc/TAT/*.wsettings
+*.akd

@@ -1,0 +1,41 @@
+﻿{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "OSEAI",
+	"Description": "",
+	"Category": "Other",
+	"CreatedBy": "OtherSide Entertainment",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "OSEAI",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+   "Plugins": [
+      {
+         "Name": "OSECore",
+         "Enabled": true
+      },
+      {
+         "Name": "GameplayAbilities",
+         "Enabled": true
+      },
+      {
+         "Name": "SmartObjects",
+         "Enabled": true
+      },
+      {
+         "Name": "GameplayBehaviors",
+         "Enabled": true
+      }
+   ]
+}

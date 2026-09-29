@@ -1,0 +1,76 @@
+//--------------------------------------------------------------------------------------------------
+// ColorUtils.ush
+//
+/// \copyright
+/// Copyright &copy; OtherSide Entertainment Inc, 2023
+/// SPDX-License-Identifier: MIT
+//--------------------------------------------------------------------------------------------------
+
+#pragma once
+#ifndef __OSE_COLORUTILS_USH_
+#define __OSE_COLORUTILS_USH_
+
+#include "/Engine/Private/GammaCorrectionCommon.ush"
+
+
+static const float3x3 sRGB_2_yCbCr_MAT =
+{
+    0.299000,  0.587000,  0.114000,
+   -0.168935, -0.331665,  0.500590,
+    0.499813, -0.418531, -0.081282,
+};
+
+static const float3x3 yCbCr_2_sRGB_MAT =
+{
+    1.000000,  0.000000,  1.402525,
+    1.000000, -0.343730, -0.714401,
+    1.000000,  1.769905,  0.000013,
+};
+
+float3 Tonemap( float3 c )
+{
+   return c * rcp( max3( c.r, c.g, c.b ) + 1.0 );
+}
+
+float3 TonemapWithWeight( float3 c, float w )
+{
+   return c * ( w * rcp( max3( c.r, c.g, c.b ) + 1.0 ) );
+}
+
+float3 TonemapInvert( float3 c )
+{
+   return c * rcp( 1.0 - max3( c.r, c.g, c.b ) );
+}
+
+float3 sRGB_2_yCbCr( float3 c )
+{
+   return mul( sRGB_2_yCbCr_MAT, c );
+}
+
+float3 LinearRGB_2_yCbCr( float3 c )
+{
+   return sRGB_2_yCbCr( LinearToSrgb( c ) );
+}
+
+float3 HDR_2_yCbCr( float3 c )
+{
+   return LinearRGB_2_yCbCr( Tonemap( c ) );
+}
+
+float3 yCbCr_2_sRGB( float3 c )
+{
+   return mul( yCbCr_2_sRGB_MAT, c );
+}
+
+float3 yCbCr_2_LinearRGB( float3 c )
+{
+   return sRGBToLinear( yCbCr_2_sRGB( c ) );
+}
+
+float3 yCbCr_2_HDR( float3 c )
+{
+   return TonemapInvert( yCbCr_2_LinearRGB( c ) );
+}
+
+
+#endif // __OSE_COLORUTILS_USH_

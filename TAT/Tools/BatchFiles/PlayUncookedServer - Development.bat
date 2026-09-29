@@ -1,0 +1,1 @@
+"..\..\..\Engine\Binaries\Win64\UnrealEditor.exe" %CD%\..\..\TAT.uproject -server -silent LOG=TAT_Server.log

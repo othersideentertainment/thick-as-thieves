@@ -1,0 +1,16 @@
+// (c) 2018-2025 OtherSide Entertainment, Inc
+// SPDX-License-Identifier: MIT
+
+#include "/Engine/Private/Common.ush"
+#include "/Engine/Private/DeferredShadingCommon.ush"
+
+void MainPS(float4 SvPosition : SV_POSITION)
+{
+   float2 ScreenUV = SvPositionToBufferUV(SvPosition);
+   FGBufferData GBufferData = GetGBufferDataFromSceneTextures(ScreenUV);
+
+   if (!IsFirstPerson(GBufferData))
+   {
+      discard;
+   }
+}

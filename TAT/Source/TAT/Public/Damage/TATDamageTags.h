@@ -1,0 +1,19 @@
+// (c) 2018-2023 OtherSide Entertainment, Inc
+// SPDX-License-Identifier: MIT
+
+#pragma once
+
+// ue5
+#include "NativeGameplayTags.h"
+
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_DamageType)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_DamageType_Physical)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_DamageType_Magic)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_DamageType_Shock)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_DamageType_Burn)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_DamageType_Poison)
+
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_SetByCaller_Damage)
+
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_DamageContext)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_DamageContext_Blocked)

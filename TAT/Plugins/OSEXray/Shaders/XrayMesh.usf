@@ -1,0 +1,154 @@
+// (c) 2018-2025 OtherSide Entertainment, Inc
+// SPDX-License-Identifier: MIT
+
+#include "/Engine/Private/Common.ush"
+
+#if defined(__INTELLISENSE__) || defined(__RESHARPER__)
+#include "/Engine/Private/MaterialTemplate.ush"
+#else
+#include "/Engine/Generated/Material.ush"
+#include "/Engine/Generated/VertexFactory.ush"
+#endif
+
+#include "/Engine/Private/DeferredShadingCommon.ush"
+#include "/Engine/Private/ShadingModelsMaterial.ush"
+#include "/Engine/Private/VelocityCommon.ush"
+
+struct FXrayOutputVS
+{
+   FVertexFactoryInterpolantsVSToPS Interpolants;
+   INVARIANT_OUTPUT float4 Position : SV_POSITION;
+
+   // .xy is clip position, pre divide by w; .w is clip W; .z is 0 or 1 to mask out the velocity output
+   INVARIANT_OUTPUT float4 VelocityPrevScreenPosition : VELOCITY_PREV_POS;
+
+#if USE_WORLD_POSITION_EXCLUDING_SHADER_OFFSETS
+   float3 PositionExcludingWPO : TEXCOORD7;
+#endif
+};
+
+void MainVS(
+   FVertexFactoryInput Input,
+   out FXrayOutputVS Output
+)
+{
+   ResolvedView = ResolveView();
+
+   FVertexFactoryIntermediates VFIntermediates = GetVertexFactoryIntermediates(Input);
+
+   float4 WorldPositionExcludingWPO = VertexFactoryGetWorldPosition(Input, VFIntermediates);
+   float4 WorldPosition = WorldPositionExcludingWPO;
+   float3x3 TangentToLocal = VertexFactoryGetTangentToLocal(Input, VFIntermediates);
+
+   FMaterialVertexParameters VertexParameters = GetMaterialVertexParameters(Input, VFIntermediates, WorldPosition.xyz, TangentToLocal);
+   Output.Interpolants = VertexFactoryGetInterpolantsVSToPS(Input, VFIntermediates, VertexParameters);
+
+   WorldPosition.xyz += GetMaterialWorldPositionOffset(VertexParameters);
+
+   float4 RasterizedWorldPosition = VertexFactoryGetRasterizedWorldPosition(Input, VFIntermediates, WorldPosition);
+   Output.Position = INVARIANT(mul(RasterizedWorldPosition, ResolvedView.TranslatedWorldToClip));
+
+   float4 PrevTranslatedWorldPosition = float4(0, 0, 0, 1);
+
+   // Use 'FLATTEN' instead of 'BRANCH' because of nVidia driver compiler bug: see UE-108339 - nVidia is working on a driver side fix right now
+   FLATTEN if ((GetPrimitiveData(VertexParameters).Flags & PRIMITIVE_SCENE_DATA_FLAG_OUTPUT_VELOCITY) != 0)
+   {
+      PrevTranslatedWorldPosition = VertexFactoryGetPreviousWorldPosition(Input, VFIntermediates);
+      VertexParameters = GetMaterialVertexParameters(Input, VFIntermediates, PrevTranslatedWorldPosition.xyz, TangentToLocal, true);
+      PrevTranslatedWorldPosition.xyz += GetMaterialPreviousWorldPositionOffset(VertexParameters);
+
+      PrevTranslatedWorldPosition = mul(float4(PrevTranslatedWorldPosition.xyz, 1), ResolvedView.PrevTranslatedWorldToClip);
+   }
+
+   // compute the old screen pos with the old world position and the old camera matrix
+   Output.VelocityPrevScreenPosition = INVARIANT(PrevTranslatedWorldPosition);
+
+#if USE_WORLD_POSITION_EXCLUDING_SHADER_OFFSETS
+   Output.PositionExcludingWPO = WorldPositionExcludingWPO.xyz;
+#endif
+}
+
+void MainPS(
+   FXrayOutputVS Input
+   OPTIONAL_IsFrontFace
+   , out float4 OutTarget0 : SV_Target0
+   // , out float4 OutTarget1 : SV_Target1
+   // , out float4 OutTarget2 : SV_Target2
+   // , out float4 OutTarget3 : SV_Target3
+   , out float4 OutTarget4 : SV_Target4
+   // , out float4 OutTarget5 : SV_Target5
+   // , out float4 OutTarget6 : SV_Target6
+   // , out float4 OutTarget7 : SV_Target7
+)
+{
+   ResolvedView = ResolveView();
+
+   FMaterialPixelParameters MaterialParameters = GetMaterialPixelParameters(Input.Interpolants, Input.Position);
+   FPixelMaterialInputs MaterialInputs;
+
+#if USE_WORLD_POSITION_EXCLUDING_SHADER_OFFSETS && !IS_NANITE_PASS
+   float4 ScreenPosition = SvPositionToResolvedScreenPosition(Input.Position);
+   float3 TranslatedWorldPosition = SvPositionToResolvedTranslatedWorld(Input.Position);
+   CalcMaterialParametersEx(MaterialParameters, MaterialInputs, Input.Position, ScreenPosition, bIsFrontFace, TranslatedWorldPosition, Input.PositionExcludingWPO);
+#elif IS_NANITE_PASS
+   float3 TranslatedWorldPosition = MaterialParameters.WorldPosition_CamRelative;
+   float3 TranslatedWorldPosition_NoOffsets = MaterialParameters.WorldPosition_NoOffsets_CamRelative;
+   CalcMaterialParametersEx(MaterialParameters, MaterialInputs, Input.Position, MaterialParameters.ScreenPosition, bIsFrontFace, TranslatedWorldPosition, TranslatedWorldPosition_NoOffsets);
+#else
+   CalcMaterialParameters(MaterialParameters, MaterialInputs, Input.Position, bIsFrontFace);
+#endif
+
+   GetMaterialCoverageAndClipping(MaterialParameters, MaterialInputs);
+
+   half3 BaseColor = GetMaterialBaseColor(MaterialInputs);
+   half Metallic = GetMaterialMetallic(MaterialInputs);
+   half Specular = GetMaterialSpecular(MaterialInputs);
+   float Roughness = GetMaterialRoughness(MaterialInputs);
+   float Anisotropy = GetMaterialAnisotropy(MaterialInputs);
+   uint ShadingModel = GetMaterialShadingModel(MaterialInputs);
+   half Opacity = GetMaterialOpacity(MaterialInputs);
+
+   FGBufferData GBuffer = (FGBufferData)0;
+   GBuffer.GBufferAO = GetMaterialAmbientOcclusion(MaterialInputs);
+   GBuffer.PerObjectGBufferData = GetPrimitive_PerObjectGBufferData(MaterialParameters.PrimitiveId);
+   GBuffer.Depth = MaterialParameters.ScreenPosition.w;
+
+   SetGBufferForShadingModel(GBuffer, MaterialParameters, Opacity, BaseColor, Metallic, Specular, Roughness, Anisotropy, 0, 0, 0, ShadingModel);
+
+   BRANCH if ((GetPrimitiveData(MaterialParameters).Flags & PRIMITIVE_SCENE_DATA_FLAG_OUTPUT_VELOCITY) != 0)
+   {
+      float3 Velocity = Calculate3DVelocity(MaterialParameters.ScreenPosition, Input.VelocityPrevScreenPosition);
+      float4 EncodedVelocity = EncodeVelocityToTexture(Velocity, (GetPrimitiveData(MaterialParameters).Flags & PRIMITIVE_SCENE_DATA_FLAG_HAS_PIXEL_ANIMATION) != 0);
+
+      GBuffer.Velocity = EncodedVelocity;
+   }
+
+   GBuffer.DiffuseColor = BaseColor - BaseColor * Metallic;
+   GBuffer.SpecularColor = ComputeF0(Specular, BaseColor, Metallic);
+
+   half3 Color = GBuffer.DiffuseColor;
+   Color += GetMaterialEmissive(MaterialInputs);
+
+   float QuantizationBias = PseudoRandom(MaterialParameters.SvPosition.xy) - 0.5f;
+
+   FPixelShaderOut Output = (FPixelShaderOut)0;
+   EncodeGBufferToMRT(Output, GBuffer, QuantizationBias);
+
+#if MATERIALBLENDING_TRANSLUCENT
+   OutTarget0 = half4(Color, Opacity);
+   OutTarget0 = RETURN_COLOR(OutTarget0);
+#elif MATERIALBLENDING_ADDITIVE
+   OutTarget0 = half4(Color * Opacity, 0.0f);
+   OutTarget0 = RETURN_COLOR(OutTarget0);
+#else
+   OutTarget0 = half4(Color, 1);
+#endif
+
+   // OutTarget1 = Output.MRT[1];
+   // OutTarget2 = Output.MRT[2];
+   // OutTarget3 = Output.MRT[3];
+   OutTarget4 = Output.MRT[4];
+   // OutTarget5 = Output.MRT[5];
+   // OutTarget6 = Output.MRT[6];
+   // OutTarget7 = Output.MRT[7];
+}

@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "[TAT] Version V2",
+	"Description": "",
+	"Category": "TAT",
+	"CreatedBy": "OtherSide Entertainment",
+	"CreatedByURL": "https://otherside-e.com",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "TATVersionV2",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}

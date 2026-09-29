@@ -1,0 +1,23 @@
+﻿{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+   "FriendlyName": "[OSE] AI Individual Knowledge",
+   "Description": "",
+   "Category": "OSE",
+   "CreatedBy": "OtherSide Entertainment",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "OSEIndividualKnowledge",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}

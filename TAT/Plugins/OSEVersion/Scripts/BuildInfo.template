@@ -1,0 +1,9 @@
+// This file is written by the build machine
+#pragma once
+#define OSE_BUILD_VERSION_MAJOR   {OSE_BUILD_VERSION_MAJOR}
+#define OSE_BUILD_VERSION_MINOR   {OSE_BUILD_VERSION_MINOR}
+#define OSE_BUILD_NUMBER          {OSE_BUILD_NUMBER}
+#define OSE_BUILD_CL		      {OSE_BUILD_CL}
+#define OSE_BUILD_CONFIGURATION   "{OSE_BUILD_CONFIGURATION}"
+#define OSE_BUILD_BRANCH		  "{OSE_BUILD_BRANCH}"
+#define OSE_BUILD_DATE            __DATE__

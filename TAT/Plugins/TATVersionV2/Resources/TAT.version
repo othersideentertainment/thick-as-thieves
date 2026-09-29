@@ -1,0 +1,11 @@
+{
+	"MajorVersion": 0,
+	"MinorVersion": 4,
+	"Shortname": "Main",
+	"Product": "TATP",
+	"BuildNumber": 0,
+	"Shorthash": "deadbee",
+	"Discriminator": "0",
+	"VcsNumber": 0,
+	"VcsBranch": "//TAT/tat_main_nosrc"
+}

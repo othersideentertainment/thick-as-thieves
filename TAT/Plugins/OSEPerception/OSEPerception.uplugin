@@ -1,0 +1,51 @@
+{
+   "FileVersion": 3,
+   "Version": 1,
+   "VersionName": "1.0",
+   "FriendlyName": "[OSE] AI Perception",
+   "Description": "",
+   "Category": "OSE",
+   "CreatedBy": "OtherSide Entertainment",
+   "CreatedByURL": "",
+   "DocsURL": "",
+   "MarketplaceURL": "",
+   "SupportURL": "",
+   "CanContainContent": true,
+   "IsBetaVersion": false,
+   "IsExperimentalVersion": false,
+   "Installed": false,
+   "Modules": [
+      {
+         "Name": "OSEPerception",
+         "Type": "Runtime",
+         "LoadingPhase": "Default"
+      },
+      {
+         "Name": "OSEPerceptionBT",
+         "Type": "Runtime",
+         "LoadingPhase": "Default"
+      },
+      {
+         "Name": "OSEPerceptionTest",
+         "Type": "UncookedOnly",
+         "LoadingPhase": "PreDefault"
+      },
+      {
+         "Name": "OSEPerceptionDebug",
+         "Type": "DeveloperTool",
+         "LoadingPhase": "Default"
+      }
+
+
+   ],
+   "Plugins": [
+      {
+         "Name": "OSECore",
+         "Enabled": true
+      },
+      {
+         "Name": "OSEAI",
+         "Enabled": true
+      }
+   ]
+}

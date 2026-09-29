@@ -1,0 +1,365 @@
+// (c) 2022 OtherSide Entertainment, Inc
+// SPDX-License-Identifier: MIT
+
+#include "/Engine/Private/Common.ush"
+#include "/Engine/Private/PostProcessCommon.ush"
+#include "/Engine/Private/ScreenPass.ush"
+
+#include "/Engine/Private/DeferredShadingCommon.ush"
+#include "/Engine/Private/ColorSpace.ush"
+#include "/Engine/Private/GammaCorrectionCommon.ush"
+#include "/Engine/Private/HeightFogCommon.ush"
+
+
+//--------------------------------------------------------------------------------------------------
+/// Definitions (may not be set by permutation vector)
+//--------------------------------------------------------------------------------------------------
+
+#ifndef NPR_ENABLE_OUTLINE_SHADINGMODEL
+#define NPR_ENABLE_OUTLINE_SHADINGMODEL ( 1 )
+#endif
+
+#ifndef NPR_ENABLE_OUTLINE_DEPTH
+#define NPR_ENABLE_OUTLINE_DEPTH ( 1 )
+#endif
+
+#ifndef NPR_ENABLE_OUTLINE_DEPTH_WORLDDIST
+#define NPR_ENABLE_OUTLINE_DEPTH_WORLDDIST ( 1 )
+#endif
+
+#ifndef NPR_ENABLE_OUTLINE_VIEWNORMAL
+#define NPR_ENABLE_OUTLINE_VIEWNORMAL ( 1 )
+#endif
+
+#ifndef NPR_ENABLE_OUTLINE_VIEWNORMAL_WORLDDIST
+#define NPR_ENABLE_OUTLINE_VIEWNORMAL_WORLDDIST ( 1 )
+#endif
+
+#ifndef NPR_ENABLE_OUTLINE_CUSTOMDATA
+#define NPR_ENABLE_OUTLINE_CUSTOMDATA ( 1 )
+#endif
+
+// Only normalize the G-buffer normal if we need it
+#define NPR_GET_NORMALIZED_NORMAL ( NPR_ENABLE_OUTLINE_VIEWNORMAL )
+
+
+//--------------------------------------------------------------------------------------------------
+/// Parameters
+//--------------------------------------------------------------------------------------------------
+
+#if ( NPR_ENABLE_OUTLINE_DEPTH )
+   // Parameter: Outline.Depth
+   float Outline_Depth_Amt; // =  1.0f;
+   float Outline_Depth_Min; // = 20.0f;
+   float Outline_Depth_Max; // = 50.0f;
+   float Outline_Depth_Exp; // =  1.0f;
+   float Outline_Depth_Dst; // =  4.0f;
+#endif // NPR_ENABLE_OUTLINE_DEPTH
+
+#if ( NPR_ENABLE_OUTLINE_VIEWNORMAL )
+   // Parameter: Outline.ViewNormal
+   float Outline_ViewNormal_Amt; // = 1.0f;
+   float Outline_ViewNormal_Min; // = 0.1f;
+   float Outline_ViewNormal_Max; // = 0.3f;
+   float Outline_ViewNormal_Exp; // = 5.0f;
+   float Outline_ViewNormal_Dst; // = 2.0f;
+#endif // NPR_ENABLE_OUTLINE_VIEWNORMAL
+
+// Parameter: Input0
+SCREEN_PASS_TEXTURE_VIEWPORT(Input0_Viewport)
+FScreenTransform  Input0_ToOutput;
+Texture2D         Input0_Texture;
+SamplerState      Input0_Sampler;
+
+
+//--------------------------------------------------------------------------------------------------
+/// Utility
+//--------------------------------------------------------------------------------------------------
+
+static const float3x3 sRGB_2_yCbCr_MAT =
+{
+    0.299000,  0.587000,  0.114000,
+   -0.168935, -0.331665,  0.500590,
+    0.499813, -0.418531, -0.081282,
+};
+
+static const float3x3 yCbCr_2_sRGB_MAT =
+{
+    1.000000,  0.000000,  1.402525,
+    1.000000, -0.343730, -0.714401,
+    1.000000,  1.769905,  0.000013,
+};
+
+float3 Tonemap( float3 c )
+{
+   return c * rcp( max3( c.r, c.g, c.b ) + 1.0 );
+}
+
+float3 TonemapWithWeight( float3 c, float w )
+{
+   return c * ( w * rcp( max3( c.r, c.g, c.b ) + 1.0 ) );
+}
+
+float3 TonemapInvert( float3 c )
+{
+   return c * rcp( 1.0 - max3( c.r, c.g, c.b ) );
+}
+
+float3 sRGB_2_yCbCr( float3 c )
+{
+   return mul( sRGB_2_yCbCr_MAT, c );
+}
+
+float3 LinearRGB_2_yCbCr( float3 c )
+{
+   return sRGB_2_yCbCr( LinearToSrgb( c ) );
+}
+
+float3 HDR_2_yCbCr( float3 c )
+{
+   return LinearRGB_2_yCbCr( Tonemap( c ) );
+}
+
+float3 yCbCr_2_sRGB( float3 c )
+{
+   return mul( yCbCr_2_sRGB_MAT, c );
+}
+
+float3 yCbCr_2_LinearRGB( float3 c )
+{
+   return sRGBToLinear( yCbCr_2_sRGB( c ) );
+}
+
+float3 yCbCr_2_HDR( float3 c )
+{
+   return TonemapInvert( yCbCr_2_LinearRGB( c ) );
+}
+
+float3 GetCameraRelativePosition( const FScreenSpaceData inScreenData, const float2 inSvPosition )
+{
+   float deviceZ = ConvertToDeviceZ( inScreenData.GBuffer.Depth );
+   return SvPositionToTranslatedWorld( float4( inSvPosition.xy, deviceZ, 1 ) );
+}
+
+float ProjectWorldDistanceToPixelDistance(float worldDepth, float worldDistance)
+{
+   return worldDistance * View.ViewSizeAndInvSize.x * 0.5 / (worldDepth * GetTanHalfFieldOfView().x);
+}
+
+
+//--------------------------------------------------------------------------------------------------
+/// Outline
+//--------------------------------------------------------------------------------------------------
+
+float ProcessOutline( const FScreenSpaceData inScreenDataBase
+                    , const float3 inCameraRelativePosition
+                    , const float2 inBufferCoord
+                    , const float2 inBufferExtInv
+                    //, const float4 inSvPosition
+                     )
+{
+   //Jorge's pattern improvement (cache friendlier)
+   static float2 s_aSampleOffset[] =
+   {
+      { -1,  0 }, // Left
+      { -1, -1 }, // Top-Left
+      {  0, -1 }, // Up
+      {  1, -1 }, // Top-Right
+      {  1,  0 }, // Right
+      {  1,  1 }, // Bottom-Right
+      {  0,  1 }, // Down
+      { -1,  1 }, // Bottom-Left
+   };
+
+   float depthDeltaMax = 0;
+   float depthDeltaMin = 0;
+
+   float viewNormalDeltaMax = -1;
+   float viewNormalDeltaMin = +1;
+
+   float shadingModelDeltaMax = 0;
+   float shadingModelDeltaMin = 255;
+   
+   float depthOutlineMax = 0;
+   float depthOutlineMin = 0;
+   
+   //float3 TranslatedWorldPosition = SvPositionToTranslatedWorld(inSvPosition);
+   //float3 CameraVector = normalize(-TranslatedWorldPosition.xyz);//Only works on perspective projection
+   
+   const float3 centerNormal = inScreenDataBase.GBuffer.WorldNormal;
+   const float3 centerPosition = inCameraRelativePosition;
+   
+   const float camDistanceBase = length( inCameraRelativePosition );
+   const float viewNormalBase = dot( inScreenDataBase.GBuffer.WorldNormal, normalize( -inCameraRelativePosition ) );
+
+   const float2 worldDistFactorXY = ( View.ViewSizeAndInvSize.xy * 0.5.xx ) / ( camDistanceBase.xx * GetTanHalfFieldOfView() );
+   const float worldDistFactor = worldDistFactorXY.x;
+
+   for ( int i = 0; i < 8; ++i )
+   {
+      const float2 coord = inBufferCoord + ( s_aSampleOffset[i] * inBufferExtInv );
+      const float2 sampleSvPos = coord / inBufferExtInv;
+      
+      const FScreenSpaceData sampleData = GetScreenSpaceData( coord, NPR_GET_NORMALIZED_NORMAL );
+      const float3 camSpacePos = GetCameraRelativePosition( sampleData, sampleSvPos );
+      const float camDistanceSample = length( camSpacePos );
+      const float3 surroundingPosition = GetCameraRelativePosition(sampleData, sampleSvPos);
+      
+      // SHADING MODEL
+   #if ( NPR_ENABLE_OUTLINE_SHADINGMODEL )
+      {
+         const float shadingModelDelta = (inScreenDataBase.GBuffer.ShadingModelID - sampleData.GBuffer.ShadingModelID);
+         shadingModelDeltaMax = max(shadingModelDeltaMax, shadingModelDelta);
+         shadingModelDeltaMin = min(shadingModelDeltaMin, shadingModelDelta);
+      }
+   #endif
+      
+      // DEPTH
+   #if ( NPR_ENABLE_OUTLINE_DEPTH )
+      {
+      #if 1
+         const float depthDelta = ( camDistanceBase - camDistanceSample );
+      #else
+         // Faster, less accurate
+         const float depthDelta = ( inScreenDataBase.GBuffer.Depth - sampleData.GBuffer.Depth );
+      #endif
+         
+         depthDeltaMax = max( depthDeltaMax, depthDelta );
+         depthDeltaMin = min( depthDeltaMin, depthDelta );
+         
+         float depthOutline = dot(centerNormal, surroundingPosition - centerPosition);
+         
+         depthOutlineMax = max(depthOutlineMax, depthOutline);
+         depthOutlineMin = min(depthOutlineMin, depthOutline);
+         //depthDeltaMin = max(depthDeltaMin, depthOutlineMin);
+
+      }
+   #endif
+
+      // VIEW NORMAL
+   #if ( NPR_ENABLE_OUTLINE_VIEWNORMAL )
+      {
+         const float viewNormalDelta = viewNormalBase - dot( sampleData.GBuffer.WorldNormal, normalize( -camSpacePos ) );
+         viewNormalDeltaMax = max( viewNormalDeltaMax, viewNormalDelta );
+         viewNormalDeltaMin = min( viewNormalDeltaMin, viewNormalDelta );
+      }
+   #endif
+
+   }
+
+   float outlineFinal = 0;
+
+   // SHADING MODEL
+#if ( NPR_ENABLE_OUTLINE_SHADINGMODEL )
+   {
+      // No parameters for this attribute
+      const float shadingModelValue = abs( shadingModelDeltaMax );
+      const float shadingModelFinal = saturate( shadingModelValue );
+      outlineFinal = max( outlineFinal, shadingModelFinal );
+   }
+#endif
+   
+   // DEPTH
+#if ( NPR_ENABLE_OUTLINE_DEPTH )
+   {
+#if ( NPR_ENABLE_OUTLINE_DEPTH_WORLDDIST )
+      const float outlineDistWeight = saturate(worldDistFactor * Outline_Depth_Dst);
+#else
+      const float outlineDistWeight = 1;
+#endif
+
+      const float attribMin = Outline_Depth_Min / outlineDistWeight;
+      const float attribMax = Outline_Depth_Max / outlineDistWeight;
+
+      const float depthValue = abs(depthOutlineMin);
+      const float depthFinal = Outline_Depth_Amt * saturate(pow(smoothstep(attribMin, attribMax, depthValue), Outline_Depth_Exp));      
+      outlineFinal = max(outlineFinal, depthFinal);
+   }
+#endif
+
+   // VIEW NORMAL
+#if ( NPR_ENABLE_OUTLINE_VIEWNORMAL )
+   {
+   #if ( NPR_ENABLE_OUTLINE_VIEWNORMAL_WORLDDIST )
+      const float outlineDistWeight = saturate( worldDistFactor * Outline_ViewNormal_Dst );
+   #else
+      const float outlineDistWeight = 1;
+   #endif
+
+      const float viewNormalValue = abs( viewNormalDeltaMin );
+      const float viewNormalFinal = Outline_ViewNormal_Amt * saturate( pow( smoothstep( Outline_ViewNormal_Min, Outline_ViewNormal_Max, viewNormalValue ), Outline_ViewNormal_Exp ) );
+      outlineFinal = max( outlineFinal, outlineDistWeight * viewNormalFinal );
+   }
+#endif
+
+   // Whether or not to use custom data to influence the outline results
+#if ( NPR_ENABLE_OUTLINE_CUSTOMDATA )
+   {
+      //const float customSub = inScreenDataBase.GBuffer.CustomData.x;
+      //const float customAdd = inScreenDataBase.GBuffer.CustomData.y;
+      //outlineFinal = outlineFinal - customSub + customAdd;
+   }
+#endif
+
+   return saturate( outlineFinal );
+}
+
+
+
+void FinalPS(
+   in noperspective float4 InUVAndScreenPos : TEXCOORD0,
+   in float4 InSvPosition : SV_POSITION,
+   out float4 OutColor : SV_Target0)
+{
+   const float2 screenPos = InUVAndScreenPos.zw;
+
+   const float2 texCoord0 = ApplyScreenTransform( InUVAndScreenPos.xy, Input0_ToOutput );
+   const float4 sceneColor = Texture2DSample( Input0_Texture, Input0_Sampler, texCoord0 );
+   float3 finalColor = sceneColor.xyz;
+
+   // Buffer coordinates for g-buffer data (usually the same as above, but not necessarily)
+   const float2 bufferCoord = SvPositionToBufferUV( InSvPosition );
+   const float2 bufferExtInv = View.BufferSizeAndInvSize.zw;
+
+   const FScreenSpaceData screenDataBase = GetScreenSpaceData( bufferCoord, NPR_GET_NORMALIZED_NORMAL );
+   const float3 camSpacePosBase = GetCameraRelativePosition( screenDataBase, InSvPosition.xy );
+
+   {
+
+#if ( NPR_ENABLE_OUTLINE )
+      {
+         // For all custom shading models, use HasCustomGBufferData( screenDataBase.GBuffer.ShadingModelID )
+         BRANCH
+         if ( screenDataBase.GBuffer.ShadingModelID == SHADINGMODELID_OSE_CUSTOM )
+         {
+            const float outlineResult = ProcessOutline( screenDataBase, camSpacePosBase, bufferCoord, bufferExtInv );//, InSvPosition );
+            const float3 outlineBaseColor = View.DirectionalLightColor.xyz * View.PreExposure.xxx;
+
+            const float3 outlineSubtract = min( finalColor, outlineBaseColor );
+            const float3 outlineColor = max( 0.0.xxx, finalColor.xyz - outlineSubtract );
+
+            finalColor = lerp( finalColor, outlineColor, pow( outlineResult, 1 ).xxx );
+         }
+      }
+#endif
+
+#if ( NPR_ENABLE_LUMA_DEC )
+      {
+         //float3 yCbCr = HDR_2_yCbCr( finalColor );
+
+         // @TODO: luma dec
+         /*
+         yCbCr.x = ( yCbCr.x * 2 ) - 1;
+         yCbCr *= 0.75.xxx;
+         yCbCr.x = ( yCbCr.x + 1 ) / 2;
+         */
+
+         //finalColor = max( 0.0.xxx, yCbCr_2_HDR( yCbCr ) );
+      }
+#endif
+
+   }
+
+   OutColor = sceneColor;
+   OutColor.xyz = finalColor;
+}

@@ -1,0 +1,18 @@
+
+// Perform multiplication of two complex numbers
+float2 jMul(float2 c0,float2 c1)
+{
+	float2 c;
+	c.x=c0.x*c1.x-c0.y*c1.y;
+	c.y=c0.x*c1.y+c0.y*c1.x;
+	return c;
+}
+
+// Performs addition of two complex numbers
+float2 jAdd(float2 c0,float2 c1)
+{
+	float2 c;
+	c.x=c0.x+c1.x;
+	c.y=c0.y+c1.y;
+	return c;
+}

@@ -1,0 +1,19 @@
+// (c) 2018-2019 OtherSide Entertainment, Inc. All rights reserved.
+#pragma once
+
+#include "Runtime/Launch/Resources/Version.h"
+#include "BuildInfo.h"
+
+#define OSE_BUILD_VERSION_STRING \
+   VERSION_STRINGIFY(OSE_BUILD_VERSION_MAJOR) \
+   VERSION_TEXT(".") \
+   VERSION_STRINGIFY(OSE_BUILD_VERSION_MINOR) \
+   VERSION_TEXT(".") \
+   VERSION_STRINGIFY(OSE_BUILD_CL) \
+   VERSION_TEXT("(") \
+   VERSION_STRINGIFY(OSE_BUILD_NUMBER) \
+   VERSION_TEXT(")") \
+   VERSION_TEXT(" ") \
+   VERSION_TEXT(OSE_BUILD_BRANCH)\
+   VERSION_TEXT("--") \
+   VERSION_TEXT(OSE_BUILD_CONFIGURATION)

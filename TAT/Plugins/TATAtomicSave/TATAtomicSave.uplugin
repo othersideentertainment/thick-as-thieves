@@ -1,0 +1,26 @@
+{
+   "FileVersion": 3,
+   "Version": 1,
+   "VersionName": "1.0",
+   "FriendlyName": "TATAtomicSave",
+   "Description": "Save to disk atomically (write temp and rename)",
+   "Category": "Other",
+   "CreatedBy": "Otherside Entertainment",
+   "CreatedByURL": "",
+   "DocsURL": "",
+   "MarketplaceURL": "",
+   "SupportURL": "",
+   "CanContainContent": true,
+   "IsBetaVersion": false,
+   "IsExperimentalVersion": false,
+   "Installed": false,
+   "SupportedTargetPlatforms": [ "Win64" ],
+   "Modules": [
+      {
+         "Name": "TATAtomicSave",
+         "Type": "Runtime",
+         "LoadingPhase": "None",
+         "PlatformAllowList": [ "Win64" ]
+      }
+   ]
+}
