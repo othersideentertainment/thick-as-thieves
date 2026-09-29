@@ -1,4 +1,6 @@
-(note of where to get the content)
+This git repo includes the source code for _Thick as Thieves_, but not the content. The content can found on the [Releases Page](https://github.com/othersideentertainment/thick-as-thieves/releases).
+
+The open source version of _Thick as Thieves_ is not completely identical to the Steam version. See [ThirdPartyRemovals.md]([ThirdPartyRemovals.md) for some details.
 ## Engine Setup
 ### Unreal Prerequisites
 Building Unreal 5.5.4 from source requires:
@@ -9,7 +11,6 @@ See https://dev.epicgames.com/documentation/unreal-engine/setting-up-visual-stud
 Thick as Thieves uses a modified version of Unreal 5.5.4, so you will need to apply the  `0001-OtherSide-Thick-as-Thieves-Engine-Changes.patch` patch to that version of the source code
 
 (All snippets assume powershell, but would be roughly similar in cmd)
-<TODO: fixup paths>
 ```
 git clone --depth 1 --branch 5.5.4-release https://github.com/EpicGames/UnrealEngine.git
 cd UnrealEngine
