@@ -1,7 +1,7 @@
 # Thick As Thieves
 This git repo includes the source code for _Thick as Thieves_, but not the content. The content can found on the [Releases Page](https://github.com/othersideentertainment/thick-as-thieves/releases).
 
-The open source version of _Thick as Thieves_ is not completely identical to the Steam version. See [ThirdPartyRemovals.md](ThirdPartyRemovals.md) for some details.
+The open source version of _Thick as Thieves_ is not completely identical to the [Steam version](https://store.steampowered.com/app/3341000/Thick_As_Thieves/). See [ThirdPartyRemovals.md](ThirdPartyRemovals.md) for some details.
 ## Engine Setup
 ### Unreal Prerequisites
 Building Unreal 5.5.4 from source requires:
