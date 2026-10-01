@@ -6,9 +6,10 @@ The open source version of _Thick as Thieves_ is not completely identical to the
 ### Unreal Prerequisites
 Building Unreal 5.5.4 from source requires:
 1. Visual Studio 2022 17.8 or later, 17.10 recommended (Default)
-2. Windows SDK 10.0.19041.0 or newer
+Build using MSVC 14.38.x - this may require forcing UE Build Config.
+3. Windows SDK 10.0.19041.0 or newer
 See https://dev.epicgames.com/documentation/unreal-engine/setting-up-visual-studio-development-environment-for-cplusplus-projects-in-unreal-engine?application_version=5.5
-3. Add GitHub to your Epic account connections
+4. Add GitHub to your Epic account connections
 See https://www.epicgames.com/help/account-c-45487929/linked-accounts-c-38854402/how-do-i-link-my-github-account-to-my-epic-games-account-a26223507 
 ### Patching the engine
 Thick as Thieves uses a modified version of Unreal 5.5.4, so you will need to apply the  `0001-OtherSide-Thick-as-Thieves-Engine-Changes.patch` patch to that version of the source code
